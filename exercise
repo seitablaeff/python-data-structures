@@ -1,0 +1,15 @@
+Exercise for stack
+
+Input:
+string up to 100000
+contains '(' '[' '{' '<'
+
+case 1
+([]{[({[[][][][]{}<{}{}{[]}>]})]})
+
+stack.push('(')
+stack.push('[')
+']' vs stack.pop()
+')' vs stack.pop()
+
+
