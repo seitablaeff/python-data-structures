@@ -4,50 +4,101 @@
 # Это означает, что элементы обрабатываются в порядке их добавления.
 
 # Просто - элементы добавляются в конец, извлекаются из начала.
+
+# Класс Нода - узла
+class Node:
+    def __init__(self, value=None, next=None, prev=None):
+        self.value = value
+        self.next = next
+        self.prev = prev
+
 class Queue:
     def __init__(self):
-        self.items = []
+        self.head = None
+        self.tail = None
+        self.size = 0
 
     # Добавляет элемент в конец очереди (хвост).
     def enqueue(self, value):
-        self.items.append(value)
+        new_node = Node(value=value, next=None)
+
+        if self.tail is None:
+            # Если очередь пуста, устанавливаем и голову, и хвост на новый узел.
+            self.head = new_node
+            self.tail = new_node
+        else:
+            # Иначе добавляем новый узел в конец очереди и обновляем указатель на хвост.
+            self.tail.next = new_node
+            self.tail = new_node
+
+        self.size += 1
 
     # Удаляет и возвращает элемент из начала очереди (головы).
     def dequeue(self):
-        self.items.pop(0)
+        if self.size == 0:
+            return None
+        
+        removed_node = self.head
+        self.head = self.head.next
+        self.size -= 1
 
-    # Возвращает элемент из начала очереди без его удаления.
+        return removed_node.value
+    
+    # Просмотр элемента из начала (головы) без удаления.
     def peek(self):
-        return self.items[0]
-
-    # Проверяет, пуста ли очередь
+        if self.size == 0:
+            return None
+        
+        return self.head.value
+    
+    # Проверяет, пуста ли очередь.
     def is_empty(self):
-        return len(self.items) == 0
-
-    # возвращает кол-во элементов в очереди
+        return self.size == 0
+    
+    # Возвращается размер очереди.
     def get_size(self):
-        return len(self.items)
+        return self.size
+    
+    # Красивый вывод очереди.
+    def __str__(self):
+        if self.size == 0:
+            return "Queue is empty"
 
-    # Удаляет все элементы из очереди, делая её пустой.
-    def clear(self):
-        self.items.clear()
+        current = self.head
+        result = ""
 
-    # Преобразует очередь в массив.
-    def to_array(self):
-        return self.items
-
-    # Инициализирует очередь элементами из массива.
-    def init_from_array(self, array):
-        for i in range(len(array)):
-            self.items.append(array[i])
-
-    # Инициализирует очередь элементами из связного списка.
-    def init_from_linked_list(self, linked_list):
-        current = linked_list.head.next
-        while current:
-            self.items.append(current.value)
+        while current is not None:
+            result += " " + str(current.value) + " "
             current = current.next
 
-    # для красивого вывода содержимого очереди
-    def __str__(self):
-        return "Front " + str(self.items) + " Rear"
+        return "Head ->" + result
+        
+# проверка методов
+q = Queue()
+q.enqueue(1)
+q.enqueue(2)
+q.enqueue(3)
+print(q)
+print(" ")
+
+r = q.dequeue()
+print(r)
+print(q)
+print(" ")
+
+p = q.peek()
+print(p)
+print(q)
+print(" ")
+
+q1 = Queue()
+print(q1.is_empty())
+print(q1.get_size())
+print(" ")
+
+q2 = Queue()
+q2.enqueue(1)
+q2.enqueue(2)
+q2.enqueue(3)
+print(q2.is_empty())
+print(q2.get_size())
