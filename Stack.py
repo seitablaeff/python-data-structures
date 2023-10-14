@@ -4,55 +4,69 @@
 # который называется вершиной стека.
 
 # Просто - элементы добавляются и удаляются только сверху.
+
+class Node:
+    def __init__(self, value=None, next=None, prev=None):
+        self.value = value
+        self.next = next
+        self.prev = prev
+
 class Stack:
     # инициализация стека
     def __init__(self):
-        self.items = []
+        self.head = None
+        self.size = 0
 
-    # добавляет новый элемент на вершину стека
+    # добавляет элемент на вершину стека
     def push(self, value):
-        self.items.append(value)
+        new_node = Node(value=value, next=self.head)
+        self.head = new_node
+        self.size += 1
 
     # удаляет и возвращает элемент с вершины стека
     def pop(self):
-        if not self.is_empty():
-            return self.items.pop()
+        if self.size == 0:
+            return None
 
-    # возвращает элемент с вершины стека без удаления
+        removed_node = self.head
+        self.head = self.head.next
+        self.size -= 1
+        return removed_node.value
+
+    # не удаляет и возвращает элемент с вершины стека
     def peek(self):
-        if not self.is_empty():
-            return self.items[-1]
-
+        return self.head.value
+    
     # проверяет, пуст ли стек
     def is_empty(self):
-        return len(self.items) == 0
+        return self.size == 0
+    
+    # возвращает количество элементов в стеке
+    def get_size(self):
+        return self.size
 
-    # поиск элемента в стеке
-    def search(self, value, default=None):
-        try:
-            return self.items.index(value)
-        except ValueError:
-            return default
+    # красивый вывод
+    def __str__(self):
+        current = self.head
+        result = ""
 
-    # создание стека из массива
-    def init_from_array(self, array):
-        self.items.extend(array)
-
-    # создание стека из связного списка
-    def init_from_linked_list(self, linked_list):
-        current = linked_list.head.next
-        while current:
-            self.items.append(current.value)
+        while current is not None:
+            result += str(current.value) + " "
             current = current.next
 
-    # для красивого вывода
-    def __str__(self):
-        return ", ".join(map(str, self.items))
+        return "Tail -> " + result
 
-    # возвращает размер стека
-    def __len__(self):
-        return len(self.items)
+# проверка методов
+s = Stack()
+print(s.is_empty())
 
-    # метод преобразования из Стека в список
-    def __iter__(self):
-        return iter(self.items)
+s.push(1)
+s.push(2)
+s.push(3)
+
+print(s)
+print(s.is_empty())
+print(s.peek())
+
+print(s.pop())
+print(s)
